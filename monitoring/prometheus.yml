@@ -1,0 +1,10 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: security-platform
+    metrics_path: /metrics
+    static_configs:
+      - targets:
+          - security-platform.security-platform.svc.cluster.local:5000

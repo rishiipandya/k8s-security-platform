@@ -1,0 +1,22 @@
+.venv/
+__pycache__/
+*.py[cod]
+security.db
+*.db
+.env
+.pytest_cache/
+
+# Local Python environment
+.venv/
+__pycache__/
+*.py[cod]
+
+# Local databases and secrets
+*.db
+.env
+
+# Terraform local state and generated files
+terraform/.terraform/
+terraform/terraform.tfstate*
+terraform/*.tfplan
+terraform/crash.log

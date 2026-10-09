@@ -1,0 +1,52 @@
+=== Kubernetes rollback experiment ===
+2026-10-09T10:10:11+00:00
+
+1. Create isolated namespace
+namespace/rollback-lab created
+
+2. Deploy known-good local image
+deployment.apps/rollback-demo created
+Waiting for deployment "rollback-demo" rollout to finish: 0 out of 1 new replicas have been updated...
+Waiting for deployment "rollback-demo" rollout to finish: 0 of 1 updated replicas are available...
+deployment "rollback-demo" successfully rolled out
+deployment.apps/rollback-demo 
+REVISION  CHANGE-CAUSE
+1         <none>
+
+
+3. Introduce a deliberately invalid image
+deployment.apps/rollback-demo image updated
+
+4. Confirm the bad rollout fails
+Waiting for deployment "rollback-demo" rollout to finish: 1 old replicas are pending termination...
+error: timed out waiting for the condition
+EXPECTED RESULT: Bad rollout did not become ready.
+NAME                             READY   STATUS              RESTARTS   AGE   IP            NODE     NOMINATED NODE   READINESS GATES
+rollback-demo-57b89f4dbc-q8qx7   0/1     ErrImageNeverPull   0          28s   10.42.0.131   lenovo   <none>           <none>
+rollback-demo-7bf57f66cc-mbj72   1/1     Running             0          31s   10.42.0.130   lenovo   <none>           <none>
+
+5. Roll back to the previous revision
+Warning: resource deployments/rollback-demo was previously managed with 'kubectl apply'. Rolling back will not update the kubectl.kubernetes.io/last-applied-configuration annotation, which may cause unexpected behavior on future 'kubectl apply' operations. Consider using 'kubectl apply' with your previous configuration file instead.
+deployment.apps/rollback-demo rolled back
+deployment "rollback-demo" successfully rolled out
+
+6. Verify restored image and ready replica
+Expected image: k8s-security-platform-security-platform:latest
+Actual image:   k8s-security-platform-security-platform:latest
+Ready replicas: 1
+
+deployment.apps/rollback-demo 
+REVISION  CHANGE-CAUSE
+2         <none>
+3         <none>
+
+NAME                            READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/rollback-demo   1/1     1            1           34s
+
+NAME                                 READY   STATUS        RESTARTS   AGE
+pod/rollback-demo-57b89f4dbc-q8qx7   0/1     Terminating   0          30s
+pod/rollback-demo-7bf57f66cc-mbj72   1/1     Running       0          33s
+
+PASS: Failed rollout detected and previous image restored.
+Evidence saved to docs/rollback-experiment.log
+2026-10-09T10:10:45+00:00
