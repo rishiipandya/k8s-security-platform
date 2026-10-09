@@ -9,7 +9,7 @@ deployment.apps/rollback-demo created
 Waiting for deployment "rollback-demo" rollout to finish: 0 out of 1 new replicas have been updated...
 Waiting for deployment "rollback-demo" rollout to finish: 0 of 1 updated replicas are available...
 deployment "rollback-demo" successfully rolled out
-deployment.apps/rollback-demo 
+deployment.apps/rollback-demo
 REVISION  CHANGE-CAUSE
 1         <none>
 
@@ -35,7 +35,7 @@ Expected image: k8s-security-platform-security-platform:latest
 Actual image:   k8s-security-platform-security-platform:latest
 Ready replicas: 1
 
-deployment.apps/rollback-demo 
+deployment.apps/rollback-demo
 REVISION  CHANGE-CAUSE
 2         <none>
 3         <none>
